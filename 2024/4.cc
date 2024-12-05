@@ -11,7 +11,7 @@ auto main() -> int {
     const auto line = *bp::char_(chars) >> bp::eol;
     const auto file = *line >> bp::eoi;
 
-    const auto result = bp::parse(file_as_string("4.input.txt"), file);
+    const auto result = bp::parse(file_as_string("2024/4.input.txt"), file);
     if (!result) {
         std::cerr << "failed to parse input" << std::endl;
         return 1;

@@ -12,7 +12,7 @@ auto main() -> int {
 
     auto parser = ((bp::long_long % ' ') % '\n') >> bp::ws;
 
-    auto result = bp::parse(file_as_string("2.input.txt"), parser);
+    auto result = bp::parse(file_as_string("2024/2.input.txt"), parser);
     if (!result) {
         std::cerr << "failed to parse input" << std::endl;
         return 1;

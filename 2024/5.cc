@@ -25,7 +25,7 @@ auto main() -> int {
     const auto game = bp::lit("Game") >> bp::int_ >> ':' >> (turn % ';');
     const auto games = *game;
 
-    const auto result = bp::parse(file_as_string("2.input.txt"), games, bp::ws);
+    const auto result = bp::parse(file_as_string("2024/2.input.txt"), games, bp::ws);
     if (!result) {
         std::cerr << "failed to parse input" << std::endl;
         return 1;
@@ -50,7 +50,7 @@ auto main() -> int {
             id_sum += id;
         }
     }
-    std::cout << "id_sum = " << id_sum << std::endl;
+    std::cout << "part 1 = " << id_sum << std::endl;
 
     //part 2
     size_t power_sum = 0;
@@ -69,7 +69,7 @@ auto main() -> int {
         size_t power = min_cubes["red"] * min_cubes["green"] * min_cubes["blue"];
         power_sum += power;
     }
-    std::cout << "power_sum = " << power_sum << std::endl;
+    std::cout << "part 2 = " << power_sum << std::endl;
 
     return 0;
 }

@@ -10,7 +10,7 @@ auto main() -> int {
 
     const auto parser = *(bp::int_ >> bp::int_);
 
-    const auto result = bp::parse(file_as_string("1.input.txt"), parser, bp::ws);
+    const auto result = bp::parse(file_as_string("2024/1.input.txt"), parser, bp::ws);
     if (!result) {
         std::cerr << "failed to parse input" << std::endl;
         return 1;
@@ -35,7 +35,7 @@ auto main() -> int {
         total_distance += distance;
     }
 
-    std::cout << "total_distance = " << total_distance << std::endl;
+    std::cout << "part 1 = " << total_distance << std::endl;
 
     //part 2
     std::unordered_map<int, int> counts;
@@ -50,7 +50,7 @@ auto main() -> int {
         total_similarity_score += similarity_score;
     }
 
-    std::cout << "total_similarity_score = " << total_similarity_score << std::endl;
+    std::cout << "part 2 = " << total_similarity_score << std::endl;
 
     return 0;
 }

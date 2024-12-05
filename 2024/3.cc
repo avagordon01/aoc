@@ -31,10 +31,10 @@ auto main() -> int {
     auto junk = bp::omit[*(bp::char_ - parser)];
     auto middle_parser = junk >> *(a_parser >> junk);
 
-    auto result = bp::parse(file_as_string("3.input.txt"), middle_parser);
+    auto result = bp::parse(file_as_string("2024/3.input.txt"), middle_parser);
 
-    std::cout << "sum_p1 = " << sum_p1 << std::endl;
-    std::cout << "sum_p2 = " << sum_p2 << std::endl;
+    std::cout << "part 1 = " << sum_p1 << std::endl;
+    std::cout << "part 2 = " << sum_p2 << std::endl;
 
     return 0;
 }
