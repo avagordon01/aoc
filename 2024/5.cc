@@ -1,11 +1,3 @@
-#include <boost/parser/parser.hpp>
-#include <boost/hana.hpp>
-#include <boost/graph/adjacency_list.hpp>
-#include <boost/graph/topological_sort.hpp>
-#include <boost/graph/filtered_graph.hpp>
-#include <vector>
-#include <unordered_map>
-#include <unordered_set>
 #include "util.hh"
 
 auto main() -> int {

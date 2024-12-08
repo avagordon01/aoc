@@ -1,8 +1,3 @@
-#include <boost/parser/parser.hpp>
-#include <boost/hana.hpp>
-#include <vector>
-#include <unordered_map>
-#include <cmath>
 #include "util.hh"
 
 auto main() -> int {
