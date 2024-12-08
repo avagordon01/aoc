@@ -22,7 +22,7 @@ function download_old {
         download
     done
     year=2024
-    for day in $(seq 1 5); do
+    for day in $(seq 1 7); do
         download
     done
 }

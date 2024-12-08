@@ -1,18 +1,13 @@
 cmake_minimum_required(VERSION 3.21)
-project(starter)
+project(aoc CXX)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 set(CMAKE_CXX_EXTENSIONS FALSE)
-set(CMAKE_COMPILE_WARNING_AS_ERROR TRUE)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address,undefined")
-
-add_compile_options(-Wall -Wextra -Wpedantic -Werror)
-
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-parameter -Wno-unused-variable -Wno-unused-but-set-variable -Wno-deprecated-declarations")
+#set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address,undefined")
 
 #set(CMAKE_CXX_CLANG_TIDY "clang-tidy;-checks=-*,bugprone-*,cert-dcl21-cpp,cert-dcl50-cpp,cert-env33-c,cert-err34-c,cert-err52-cpp,cert-err60-cpp,cert-flp30-c,cert-msc50-cpp,cert-msc51-cpp,cppcoreguidelines-*,google-build-using-namespace,google-explicit-constructor,google-global-names-in-headers,google-readability-casting,google-runtime-int,google-runtime-operator,hicpp-*,-hicpp-vararg,misc-*,modernize-*,performance-*,readability-*,-readability-identifier-length,-misc-use-anonymous-namespace")
 
@@ -20,27 +15,54 @@ include(CTest)
 include(FetchContent)
 
 find_package(GTest)
+find_package(Eigen3 REQUIRED) # https://eigen.tuxfamily.org/dox/group__QuickRefPage.html
+# https://libeigen.gitlab.io/docs/group__QuickRefPage.html
 
 #NOTE include Boost beta for 1.87 parser library
-set(BOOST_INCLUDE_LIBRARIES parser assert hana type_index)
+#when 1.87 is released:
+#find_package(Boost 1.87 REQUIRED COMPONENTS <components>)
+set(BOOST_INCLUDE_LIBRARIES
+  parser      # https://www.boost.org/doc/libs/1_87_0_beta1/doc/html/parser.html
+  graph       # https://www.boost.org/doc/libs/release/libs/graph/
+  algorithm   # https://www.boost.org/doc/libs/release/libs/algorithm/doc/html/index.html
+  bimap       # https://www.boost.org/doc/libs/release/libs/bimap/doc/html/index.html
+  icl         # https://www.boost.org/doc/libs/release/libs/icl/doc/html/index.html
+  rational    # https://www.boost.org/doc/libs/release/libs/rational/rational.html
+  unordered   # https://www.boost.org/doc/libs/release/libs/unordered/doc/html/unordered.html
+)
 FetchContent_Declare(
   Boost
   URL https://github.com/boostorg/boost/releases/download/boost-1.87.0.beta1/boost-1.87.0.beta1-cmake.tar.gz
+  SYSTEM
 )
+# TODO mesh library
+# openmesh https://www.graphics.rwth-aachen.de/media/openmesh_static/Documentations/OpenMesh-Doc-Latest/
+# boost.polygon https://www.boost.org/doc/libs/1_86_0/libs/polygon/doc/index.htm
 FetchContent_MakeAvailable(Boost)
+FetchContent_Declare(
+  libassert
+  GIT_REPOSITORY https://github.com/jeremy-rifkin/libassert.git
+  GIT_TAG        v2.1.2
+  SYSTEM
+)
+FetchContent_MakeAvailable(libassert)
 
-foreach(i RANGE 1 5)
-  set(year 2024)
-  add_executable(${year}-${i} ${year}/${i}.cc)
-  target_link_libraries(${year}-${i} Boost::parser)
-  target_include_directories(${year}-${i} PUBLIC "${PROJECT_SOURCE_DIR}")
-  install(TARGETS ${year}-${i})
-endforeach()
+add_compile_options(
+  -Wall -Wextra -Wpedantic -Werror
+  -Wno-unused-parameter -Wno-unused-variable -Wno-unused-but-set-variable
+)
+link_libraries(
+  Boost::parser Boost::graph
+  Eigen3::Eigen
+  libassert::assert
+)
+include_directories(PUBLIC "${PROJECT_SOURCE_DIR}")
 
-foreach(i 2 5 6)
-  set(year 2023)
-  add_executable(${year}-${i} ${year}/${i}.cc)
-  target_link_libraries(${year}-${i} Boost::parser)
-  target_include_directories(${year}-${i} PUBLIC "${PROJECT_SOURCE_DIR}")
-  install(TARGETS ${year}-${i})
+file(GLOB srcs RELATIVE "${PROJECT_SOURCE_DIR}" 2023/*.cc 2024/*.cc)
+foreach(src ${srcs})
+  get_filename_component(year ${src} DIRECTORY)
+  get_filename_component(day ${src} NAME_WE)
+  set(name ${year}-${day})
+  add_executable(${name} ${src})
+  install(TARGETS ${name})
 endforeach()

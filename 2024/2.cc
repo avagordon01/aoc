@@ -2,13 +2,14 @@
 #include <boost/hana.hpp>
 #include <vector>
 #include <unordered_map>
+#include <algorithm>
+#include <ranges>
 #include <cmath>
 #include "util.hh"
 
 auto main() -> int {
     //parse input
     namespace bp = boost::parser;
-    using namespace boost::parser::literals;
 
     auto parser = ((bp::long_long % ' ') % '\n') >> bp::ws;
 
@@ -21,59 +22,53 @@ auto main() -> int {
     //part 1
     const auto& reports = *result;
 
-    const auto safe_check = [](int s, int a, int b) {
-        return s == sign(b - a) &&
-            std::abs(b - a) >= 1 &&
-            std::abs(b - a) <= 3;
+    auto level_check = [](auto t) {
+        auto [a, b] = t;
+        return std::abs(b - a) >= 1 && std::abs(b - a) <= 3;
+    };
+    auto sign_check = [](auto t) {
+        auto [a, b, c] = t;
+        return sign(b - a) == sign(c - b);
+    };
+
+    auto all_safe = [&](auto&& r) {
+        auto all_level_safe = std::ranges::all_of(
+            r | std::views::adjacent<2>,
+            level_check);
+        auto all_sign_safe = std::ranges::all_of(
+            r | std::views::adjacent<3>,
+            sign_check);
+        return all_level_safe && all_sign_safe;
     };
 
     size_t num_safe = 0;
     for (const auto& report: reports) {
-        int s = sign(report[1] - report[0]);
-        bool all_safe = true;
-        for (size_t i = 0; i < report.size() - 1; i++) {
-            all_safe &= safe_check(s, report[i], report[i + 1]);
+        if (all_safe(report)) {
+            num_safe++;
         }
-
-        num_safe += all_safe;
     }
     std::cout << "part 1 = " << num_safe << std::endl;
 
     //part 2
     size_t num_safe_2 = 0;
     for (const auto& report: reports) {
-        if (report.size() <= 2) {
-            num_safe_2 += 1;
+        if (all_safe(report)) {
+            num_safe_2++;
             continue;
         }
-        auto s_total = 0;
-        for (size_t i = 0; i < report.size() - 1; i++) {
-            const auto s = sign(report[i + 1] - report[i]);
-            s_total += s;
-        }
-        const auto s = sign(s_total);
-
-        bool all_safe = true;
-        bool used_skip = false;
-        size_t error_count = 0;
-        for (size_t i = 0; i < report.size() - 1; i++) {
-            if (safe_check(s, report[i], report[i + 1])) {
-            } else if (!used_skip) {
-                //FIXME no way to skip the first item
-                if (i + 2 < report.size() && safe_check(s, report[i], report[i + 2])) {
-                    used_skip = true;
-                    i++;
-                } else {
-                    all_safe = false;
-                    break;
-                }
-            } else {
-                all_safe = false;
+        for (size_t skip = 0; skip < report.size(); skip++) {
+            const auto skip_nth =
+                std::views::enumerate
+                | std::views::filter([&](auto&& pair) {
+                        return std::get<0>(pair) != static_cast<unsigned int>(skip);
+                })
+                | std::views::values;
+            auto skipped = report | skip_nth;
+            if (all_safe(skipped)) {
+                num_safe_2++;
                 break;
             }
         }
-
-        num_safe_2 += all_safe;
     }
     std::cout << "part 2 = " << num_safe_2 << std::endl;
 
