@@ -36,6 +36,9 @@ auto main() -> int {
     using coord = Eigen::Vector2i;
     coord pos;
     const coord grid_size{grid[0].size(), grid.size()};
+    const auto bounds_check = [grid_size](const auto& pos) {
+        return md_bounds_check(grid_size, pos);
+    };
     bool found = false;
     for (pos[1] = 0; pos[1] < grid_size[1]; pos[1]++) {
         for (pos[0] = 0; pos[0] < grid_size[0]; pos[0]++) {
@@ -61,9 +64,7 @@ auto main() -> int {
     int dir_index = 0;
     const auto guard_dir = dirs[dir_index];
     while (true) {
-        if (pos[0] >= grid_size[0] || pos[1] >= grid_size[1] ||
-            pos[0] < 0 || pos[1] < 0
-        ) {
+        if (!bounds_check(pos)) {
             break;
         }
         char& c = grid[pos[1]][pos[0]];
@@ -91,13 +92,11 @@ auto main() -> int {
     std::cout << "part 1 = " << count << std::endl;
 
     //part 2
-    const auto inner_traverse = [&dirs, &grid_size](auto& grid_copy, const coord start_pos, const size_t start_dir_index) {
+    const auto inner_traverse = [&dirs, &bounds_check](auto& grid_copy, const coord start_pos, const size_t start_dir_index) {
         auto pos = start_pos;
         auto dir_index = start_dir_index;
         while (true) {
-            if (pos[0] >= grid_size[0] || pos[1] >= grid_size[1] ||
-                pos[0] < 0 || pos[1] < 0
-            ) {
+            if (!bounds_check(pos)) {
                 //no loop
                 return false;
             }
@@ -123,11 +122,9 @@ auto main() -> int {
     {
         auto pos = guard_pos;
         auto dir_index = 0;
-        size_t loop_count = 0;
+        std::unordered_set<coord> obstacles;
         while (true) {
-            if (pos[0] >= grid_size[0] || pos[1] >= grid_size[1] ||
-                pos[0] < 0 || pos[1] < 0
-            ) {
+            if (!bounds_check(pos)) {
                 break;
             }
             auto grid_copy = grid;
@@ -136,9 +133,7 @@ auto main() -> int {
             {
                 //insert an obstacle
                 //if it would be outside the grid, or there is already an obstacle there, skip
-                if (new_obstacle_pos[0] >= grid_size[0] || new_obstacle_pos[1] >= grid_size[1] ||
-                    new_obstacle_pos[0] < 0 || new_obstacle_pos[1] < 0
-                ) {
+                if (!bounds_check(new_obstacle_pos)) {
                     skip = true;
                 }
                 if (!skip) {
@@ -151,7 +146,7 @@ auto main() -> int {
             }
             if (!skip) {
                 if (inner_traverse(grid_copy, pos, dir_index)) {
-                    loop_count++;
+                    obstacles.insert(new_obstacle_pos);
                 }
             }
             char& c = grid[pos[1]][pos[0]];
@@ -180,7 +175,7 @@ auto main() -> int {
                 pos += dirs[dir_index];
             }
         }
-        std::cout << "part 2 = " << loop_count << std::endl;
+        std::cout << "part 2 = " << obstacles.size() << std::endl;
     }
 
     return 0;

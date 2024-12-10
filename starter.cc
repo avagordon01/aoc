@@ -3,7 +3,7 @@
 auto main() -> int {
     namespace bp = boost::parser;
 
-    const auto p_line = bp::ulong_long % bp::blank >> bp::eol];
+    const auto p_line = bp::ulong_long % bp::blank >> bp::eol;
     const auto p_file = *p_line >> bp::eoi;
 
     const auto example = std::string{R"EOF(
