@@ -104,27 +104,77 @@ std::ostream& operator<<(std::ostream& os, const std::vector<std::string>& grid)
 namespace util {
 template<typename X, typename Y>
 std::ostream& operator<<(std::ostream& os, const std::pair<X, Y>& p) {
-    os << "pair<" << p.first << ", " << p.second << ">";
+    os << "pair{" << p.first << ", " << p.second << "}";
     return os;
 }
 
 template<typename X>
 std::ostream& operator<<(std::ostream& os, const std::vector<X>& v) {
-    os << "vector<";
+    os << "vector{";
     for (const auto& x: v) {
         os << x << ", ";
     }
-    os << ">";
+    os << "}";
     return os;
 }
 
 template<typename X, size_t N>
 std::ostream& operator<<(std::ostream& os, const std::array<X, N>& a) {
-    os << "array<";
+    os << "array{";
     for (const auto& x: a) {
         os << x << ", ";
     }
-    os << ">";
+    os << "}";
+    return os;
+}
+
+template<typename X>
+std::ostream& operator<<(std::ostream& os, const std::list<X>& l) {
+    os << "list{";
+    for (const auto& x: l) {
+        os << x << ", ";
+    }
+    os << "}";
+    return os;
+}
+
+template<typename K, typename V>
+std::ostream& operator<<(std::ostream& os, const std::unordered_map<K, V>& m) {
+    os << "unordered_map{";
+    for (const auto& [k, v]: m) {
+        os << "{" << k << ": " << v << "}, ";
+    }
+    os << "}";
+    return os;
+}
+
+template<typename V>
+std::ostream& operator<<(std::ostream& os, const std::unordered_set<V>& s) {
+    os << "unordered_set{";
+    for (const auto& v: s) {
+        os << v << ", ";
+    }
+    os << "}";
+    return os;
+}
+
+template<typename K, typename V>
+std::ostream& operator<<(std::ostream& os, const std::map<K, V>& m) {
+    os << "map{";
+    for (const auto& [k, v]: m) {
+        os << "{" << k << ": " << v << "}, ";
+    }
+    os << "}";
+    return os;
+}
+
+template<typename V>
+std::ostream& operator<<(std::ostream& os, const std::set<V>& s) {
+    os << "set{";
+    for (const auto& v: s) {
+        os << v << ", ";
+    }
+    os << "}";
     return os;
 }
 }
