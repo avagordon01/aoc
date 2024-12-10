@@ -8,7 +8,7 @@ if [ ! -d build ]; then
     cmake -G "Ninja Multi-Config" -S . -B build || rm -rf build
 fi
 if [ -d build ]; then
-    config=Debug
+    config=Release
     cmake --build build --config ${config}
     cmake --install build --config ${config} --prefix install
 fi

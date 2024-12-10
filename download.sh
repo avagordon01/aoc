@@ -12,8 +12,8 @@ function download {
 }
 
 function download_today {
-    year=$(date '+%Y')
-    day=$(date '+%-d')
+    year=$(TZ=EST date '+%Y')
+    day=$(TZ=EST date '+%-d')
     download
 }
 
