@@ -2,11 +2,13 @@
 
 set -ex
 
+#Ninja Multi-Config allows quick & easy switching between Debug and Release builds without removing and rebuilding the whole build dir
 if [ ! -d build ]; then
     mkdir -p build
-    cmake -G Ninja -S . -B build -DCMAKE_BUILD_TYPE=Release || rm -rf build
+    cmake -G "Ninja Multi-Config" -S . -B build || rm -rf build
 fi
 if [ -d build ]; then
-    cmake --build build
-    cmake --install build --prefix install
+    config=Debug
+    cmake --build build --config ${config}
+    cmake --install build --config ${config} --prefix install
 fi

@@ -33,6 +33,7 @@ set(BOOST_INCLUDE_LIBRARIES
 FetchContent_Declare(
   Boost
   URL https://github.com/boostorg/boost/releases/download/boost-1.87.0.beta1/boost-1.87.0.beta1-cmake.tar.gz
+  EXCLUDE_FROM_ALL
   SYSTEM
 )
 # TODO mesh library
@@ -43,6 +44,7 @@ FetchContent_Declare(
   libassert
   GIT_REPOSITORY https://github.com/jeremy-rifkin/libassert.git
   GIT_TAG        v2.1.2
+  EXCLUDE_FROM_ALL
   SYSTEM
 )
 FetchContent_MakeAvailable(libassert)
