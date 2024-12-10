@@ -3,6 +3,7 @@
 set -ex
 
 function download {
+    mkdir -p ${year}
     file=${year}/${day}.input.txt
     if [ ! -f ${file} ]; then
         curl -o ${file} "https://adventofcode.com/${year}/day/${day}/input" \
@@ -17,9 +18,10 @@ function download_today {
 }
 
 function download_old {
-    year=2023
-    for day in $(seq 1 25); do
-        download
+    for year in $(seq 2015 2023); do
+        for day in $(seq 1 25); do
+            download
+        done
     done
     year=2024
     for day in $(seq 1 7); do

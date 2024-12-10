@@ -6,4 +6,4 @@ set -ex
 
 ./download.sh
 
-./install/bin/2024-8
+./install/bin/2024-10
