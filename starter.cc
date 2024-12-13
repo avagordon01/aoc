@@ -19,25 +19,13 @@ auto main() -> int {
 
     const auto& lines = *result;
 
-    ASSERT(lines.size() > 0);
-
     //part 1
-    uint64_t sum = 0;
-    for (const auto& line: lines) {
-        for (const auto num: line) {
-            sum += num;
-        }
-    }
-    std::cout << "part 1 = " << sum << std::endl;
+    uint64_t total_p1 = 0;
+    std::cout << "part 1 = " << total_p1 << std::endl;
 
     //part 2
-    uint64_t sum_p2 = 0;
-    for (const auto& line: lines) {
-        for (const auto num: line) {
-            sum_p2 += num;
-        }
-    }
-    std::cout << "part 2 = " << sum_p2 << std::endl;
+    uint64_t total_p2 = 0;
+    std::cout << "part 2 = " << total_p2 << std::endl;
 
     return 0;
 }
