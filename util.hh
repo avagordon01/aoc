@@ -48,13 +48,7 @@ const auto tuple_to_pair = [](const auto& t) {
 
 //multi-dimensional bounds checking
 const auto md_bounds_check = [](const auto& bounds, const auto& index) -> bool {
-    for (const auto& [b, i]: std::views::zip(bounds, index)) {
-        if (i >= 0 && i < b) {
-        } else {
-            return false;
-        }
-    }
-    return true;
+    return (index.array() >= 0 && index.array() < bounds.array()).all();
 };
 
 //implements std::hash for any range / container

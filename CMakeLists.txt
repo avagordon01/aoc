@@ -18,11 +18,10 @@ find_package(GTest)
 find_package(Eigen3 REQUIRED) # https://eigen.tuxfamily.org/dox/group__QuickRefPage.html
 # https://libeigen.gitlab.io/docs/group__QuickRefPage.html
 
-#NOTE include Boost beta for 1.87 parser library
-#when 1.87 is released:
+#when boost 1.87 makes it to the arch repos
 #find_package(Boost 1.87 REQUIRED COMPONENTS <components>)
 set(BOOST_INCLUDE_LIBRARIES
-  parser      # https://www.boost.org/doc/libs/1_87_0_beta1/doc/html/parser.html
+  parser      # https://www.boost.org/doc/libs/release/doc/html/parser.html
   graph       # https://www.boost.org/doc/libs/release/libs/graph/
   algorithm   # https://www.boost.org/doc/libs/release/libs/algorithm/doc/html/index.html
   bimap       # https://www.boost.org/doc/libs/release/libs/bimap/doc/html/index.html
@@ -32,7 +31,7 @@ set(BOOST_INCLUDE_LIBRARIES
 )
 FetchContent_Declare(
   Boost
-  URL https://github.com/boostorg/boost/releases/download/boost-1.87.0.beta1/boost-1.87.0.beta1-cmake.tar.gz
+  URL https://github.com/boostorg/boost/releases/download/boost-1.87.0/boost-1.87.0-cmake.tar.gz
   EXCLUDE_FROM_ALL
   SYSTEM
 )
@@ -52,6 +51,7 @@ FetchContent_MakeAvailable(libassert)
 add_compile_options(
   -Wall -Wextra -Wpedantic -Werror
   -Wno-unused-parameter -Wno-unused-variable -Wno-unused-but-set-variable
+  -Wno-comma-subscript
 )
 link_libraries(
   Boost::parser Boost::graph
