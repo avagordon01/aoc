@@ -13,6 +13,9 @@
 
 #include <libassert/assert.hpp>
 
+#include <coin/ClpSimplex.hpp>
+#include <coin/CbcModel.hpp>
+
 auto file_as_string(std::string filename) -> std::string {
     std::ifstream file(filename);
     std::stringstream buffer;

@@ -14,6 +14,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 include(CTest)
 include(FetchContent)
 
+find_package(PkgConfig REQUIRED)
 find_package(GTest)
 find_package(Eigen3 REQUIRED) # https://eigen.tuxfamily.org/dox/group__QuickRefPage.html
 # https://libeigen.gitlab.io/docs/group__QuickRefPage.html
@@ -48,6 +49,9 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(libassert)
 
+pkg_check_modules(clp REQUIRED IMPORTED_TARGET) # https://www.coin-or.org/Clp/userguide/index.html
+pkg_check_modules(cbc REQUIRED IMPORTED_TARGET) # https://www.coin-or.org/Cbc/cbcuserguide.html
+
 add_compile_options(
   -Wall -Wextra -Wpedantic -Werror
   -Wno-unused-parameter -Wno-unused-variable -Wno-unused-but-set-variable
@@ -57,6 +61,7 @@ link_libraries(
   Boost::parser Boost::graph
   Eigen3::Eigen
   libassert::assert
+  PkgConfig::clp PkgConfig::cbc
 )
 include_directories(PUBLIC "${PROJECT_SOURCE_DIR}")
 
