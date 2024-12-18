@@ -3,10 +3,6 @@
 #include <boost/container_hash/hash.hpp>
 #include <boost/container_hash/is_tuple_like.hpp>
 
-const auto positive_mod(const auto a, const auto b) {
-    return (b + (a % b)) % b;
-};
-
 //implements std::hash for pair, tuple, array, etc
 namespace std {
     template <typename T>
@@ -90,12 +86,6 @@ auto main() -> int {
         }
     }
 
-    const auto dirs_2d_4 = std::array<Eigen::Vector2i, 4>{{
-        {0, 1},
-        {1, 0},
-        {0, -1},
-        {-1, 0},
-    }};
     const auto dirs = dirs_2d_4;
 
     const auto start_dir_i = 1uz;

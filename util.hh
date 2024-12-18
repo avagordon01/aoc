@@ -172,3 +172,71 @@ std::ostream& operator<<(std::ostream& os, const std::set<V>& s) {
     return os;
 }
 }
+
+const auto positive_mod(const auto a, const auto b) {
+    return (b + (a % b)) % b;
+};
+
+template<size_t X, size_t Y, size_t Z = 1>
+struct mdbitset: std::bitset<X * Y * Z> {
+    using parent = std::bitset<X * Y * Z>;
+    using reference = parent::reference;
+    constexpr reference operator[](Eigen::Vector2i pos) {
+        assert((pos.array() >= 0).all());
+        return operator[](pos[0], pos[1]);
+    }
+    constexpr reference operator[](size_t x, size_t y, size_t z) {
+        assert(x < X && y < Y && z < Z);
+        return parent::operator[](z * Y * X + y * X + x);
+    }
+    constexpr bool operator[](size_t x, size_t y, size_t z) const {
+        assert(x < X && y < Y && z < Z);
+        return parent::operator[](z * Y * X + y * X + x);
+    }
+    constexpr reference operator[](size_t x, size_t y) {
+        assert(x < X && y < Y);
+        return parent::operator[](y * X + x);
+    }
+    constexpr bool operator[](size_t x, size_t y) const {
+        assert(x < X && y < Y);
+        return parent::operator[](y * X + x);
+    }
+};
+
+template<size_t X, size_t Y, size_t Z>
+std::ostream& operator<<(std::ostream& os, const mdbitset<X, Y, Z>& b) {
+    for (size_t y = 0; y < Y; y++) {
+        for (size_t x = 0; x < X; x++) {
+            os << (b[x, y] ? '#' : '.');
+        }
+        os << std::endl;
+    }
+    return os;
+}
+
+const auto dirs_2d_4 = std::array<Eigen::Vector2i, 4>{{
+    {0, 1},
+    {1, 0},
+    {0, -1},
+    {-1, 0},
+}};
+
+const auto dirs_2d_8 = std::array<Eigen::Vector2i, 8>{{
+    {0, 1},
+    {1, 1},
+    {1, 0},
+    {1, -1},
+    {0, -1},
+    {-1, -1},
+    {-1, 0},
+    {-1, 1},
+}};
+
+const auto dirs_3d_6 = std::array<Eigen::Vector3i, 6>{{
+    {0, 0, 1},
+    {0, 1, 0},
+    {1, 0, 0},
+    {0, 0, -1},
+    {0, -1, 0},
+    {-1, 0, 0},
+}};

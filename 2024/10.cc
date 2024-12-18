@@ -42,12 +42,7 @@ auto main() -> int {
             }
         }
     }
-    const auto dirs = std::array<coord, 4>{{
-        {0, 1},
-        {1, 0},
-        {0, -1},
-        {-1, 0},
-    }};
+    const auto dirs = dirs_2d_4;
     const auto traverse = [&](coord start_pos) -> size_t {
         size_t count = 0;
         std::vector<coord> next_pos{start_pos};

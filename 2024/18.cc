@@ -1,12 +1,5 @@
 #include "util.hh"
 
-const auto dirs_2d_4 = std::array<Eigen::Vector2i, 4>{{
-    {0, 1},
-    {1, 0},
-    {0, -1},
-    {-1, 0},
-}};
-
 auto main() -> int {
     namespace bp = boost::parser;
 
@@ -27,9 +20,9 @@ auto main() -> int {
 
     const auto grid_size = coord(71, 71);
 
-    std::array<std::bitset<71>, 71> blocked{};
+    mdbitset<71, 71> blocked{};
     for (const auto& [x, y]: byte_coords | std::views::take(1024)) {
-        blocked[y][x] = true;
+        blocked[x, y] = true;
     }
 
     const auto start = coord::Zero();
@@ -54,20 +47,20 @@ auto main() -> int {
         > to_visit(compare);
         to_visit.push({start, 0});
 
-        std::array<std::bitset<71>, 71> visited{};
+        mdbitset<71, 71> visited{};
 
         while (!to_visit.empty()) {
             const auto [pos, cost] = to_visit.top();
             to_visit.pop();
-            visited[pos[1]][pos[0]] = true;
+            visited[pos] = true;
             if (pos == end) {
                 return {cost};
             }
             for (const auto& dir: dirs) {
                 const auto next_pos = pos + dir;
                 if (md_bounds_check(grid_size, next_pos) &&
-                    !visited[next_pos[1]][next_pos[0]] &&
-                    !blocked[next_pos[1]][next_pos[0]]
+                    !visited[next_pos] &&
+                    !blocked[next_pos]
                 ) {
                     to_visit.push({next_pos, cost + 1});
                 }
@@ -79,7 +72,7 @@ auto main() -> int {
 
     //part 2
     for (const auto& [x, y]: byte_coords | std::views::drop(1024)) {
-        blocked[y][x] = true;
+        blocked[x, y] = true;
 
         if (!a_star_search(start, end, heuristic)) {
             std::cout << "part 2 = " << x << ',' << y << std::endl;

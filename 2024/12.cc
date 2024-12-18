@@ -42,12 +42,7 @@ MMMISSJEEE
         }
     }
 
-    const auto dirs = std::array<coord, 4>{{
-        {0, 1},
-        {1, 0},
-        {0, -1},
-        {-1, 0},
-    }};
+    const auto dirs = dirs_2d_4;
 
     //label regions
     const auto flood_fill = [&](const auto start_pos) {
