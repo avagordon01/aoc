@@ -4,8 +4,10 @@ set -ex
 
 ./build.sh
 
-./download.sh
+#./download.sh
 
-year=$(TZ=EST date '+%Y')
-day=$(TZ=EST date '+%-d')
-./install/bin/${year}-${day}
+#year=$(TZ=EST date '+%Y')
+#day=$(TZ=EST date '+%-d')
+#./install/bin/${year}-${day}
+
+./install/bin/2024-22

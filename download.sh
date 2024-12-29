@@ -18,7 +18,7 @@ function download_today {
 }
 
 function download_old {
-    for year in $(seq 2015 2023); do
+    for year in $(seq 2015 2024); do
         for day in $(seq 1 25); do
             download
         done
@@ -29,4 +29,4 @@ function download_old {
     done
 }
 
-download_today
+download_old
