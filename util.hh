@@ -5,9 +5,13 @@
 
 #include <boost/parser/parser.hpp>
 #include <boost/hana.hpp>
+#include <boost/container_hash/hash.hpp>
+#include <boost/container_hash/is_tuple_like.hpp>
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/topological_sort.hpp>
 #include <boost/graph/filtered_graph.hpp>
+#include <boost/graph/hawick_circuits.hpp>
+#include <boost/graph/bron_kerbosch_all_cliques.hpp>
 
 #include <eigen3/Eigen/Dense>
 
@@ -62,6 +66,19 @@ namespace std {
     size_t operator()(const T& x) const
     {
         return boost::hash_range(x.begin(), x.end());
+    }
+    };
+}
+
+//implements std::hash for pair, tuple, array, etc
+namespace std {
+    template <typename T>
+    requires boost::container_hash::is_tuple_like<T>::value
+    struct hash<T>
+    {
+    size_t operator()(const T& x) const
+    {
+        return boost::hash_value(x);
     }
     };
 }

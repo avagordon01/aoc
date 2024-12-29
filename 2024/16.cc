@@ -1,21 +1,5 @@
 #include "util.hh"
 
-#include <boost/container_hash/hash.hpp>
-#include <boost/container_hash/is_tuple_like.hpp>
-
-//implements std::hash for pair, tuple, array, etc
-namespace std {
-    template <typename T>
-    requires boost::container_hash::is_tuple_like<T>::value
-    struct hash<T>
-    {
-    size_t operator()(const T& x) const
-    {
-        return boost::hash_value(x);
-    }
-    };
-}
-
 auto main() -> int {
     namespace bp = boost::parser;
 
