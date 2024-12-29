@@ -113,15 +113,44 @@ MMMISSJEEE
     for (const auto& [r, area_perimeter]: regions_area_perimeter) {
         //std::println("r = {}, area = {}, perimeter = {}", r, area_perimeter.first, area_perimeter.second);
         const auto& n = grid[r[1]][r[0]];
-        std::cout << "r = " << r << ", n = " << n << ", area = " << area_perimeter.first << ", perimeter = " << area_perimeter.second << std::endl;
         total += area_perimeter.first * area_perimeter.second;
     }
 
     std::cout << "part 1 = " << total << std::endl;
 
     //part 2
-    uint64_t sum_p2 = 0;
-    std::cout << "part 2 = " << sum_p2 << std::endl;
+    const auto traverse_perimeter = [&](const auto start_pos) -> size_t {
+        size_t num_sides = 0;
+        auto pos = start_pos;
+        //the starting position in a region should always be on the top left corner
+        //so starting direction can be rightwards
+        const auto start_dir_index = 1;
+        auto dir_index = start_dir_index;
+        do {
+            //try turning left first
+            //then straight ahead
+            //then try turning right
+            for (int i = -1; i <= 2; i++) {
+                const auto next_dir_index = dir_index + i;
+                const auto next_dir = dirs[positive_mod(next_dir_index, dirs.size())];
+                const auto next_pos = pos + next_dir;
+                if (bounds_check(next_pos) &&
+                    grid[next_pos[1]][next_pos[0]] == '.'
+                ) {
+                    pos = next_pos;
+                    dir_index = next_dir_index;
+                    num_sides += abs(i);
+                    break;
+                }
+            }
+        } while (pos != start_pos && dir_index != start_dir_index);
+        return num_sides;
+    };
+    size_t sides = 0;
+    for (const auto& [start_pos, _]: regions_area_perimeter) {
+        sides += traverse_perimeter(start_pos);
+    }
+    std::cout << "part 2 = " << sides << std::endl;
 
     return 0;
 }
