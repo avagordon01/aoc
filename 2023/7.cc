@@ -1,9 +1,17 @@
 #include "util.hh"
 
+template<size_t N, typename T>
+auto vec_to_array(const std::vector<T>& v) {
+    std::array<T, N> a{};
+    ASSERT(v.size() <= a.size());
+    std::ranges::move(v, a.begin());
+    return a;
+};
+
 auto main() -> int {
     namespace bp = boost::parser;
 
-    const bp::symbols<int> p_card = {
+    const bp::symbols<size_t> p_card = {
         {"A", 14},
         {"K", 13},
         {"Q", 12},
@@ -26,16 +34,15 @@ auto main() -> int {
         four,
         five,
     };
-    auto to_hand_type = [](std::map<int, int>& hand) {
-        auto top = hand.begin()->second;
-        auto second = std::next(hand.begin())->second;
+    auto to_hand_type = [](const std::map<size_t, size_t>& hand) {
+        const auto top = hand.begin()->second;
         if (top == 5) {
             return hand_type::five;
         } else if (top == 4) {
             return hand_type::four;
-        } else if (top == 3 && second == 2) {
+        } else if (top == 3 && std::next(hand.begin())->second == 2) {
             return hand_type::three_two;
-        } else if (top == 2 && second == 2) {
+        } else if (top == 2 && std::next(hand.begin())->second == 2) {
             return hand_type::two_two;
         } else if (top == 2) {
             return hand_type::two;
@@ -43,47 +50,75 @@ auto main() -> int {
             return hand_type::one;
         }
     };
-    auto a_hand_transform = [&](std::vector<int> v) {
-        std::map<int, int> m;
+    auto a_hand_transform = [&](const std::vector<size_t>& v) {
+        std::map<size_t, size_t> m;
         for (auto i: v) {
             m[i]++;
         }
         auto x = v;
-        return std::make_pair(to_hand_type(m), x);
+        return std::make_pair(to_hand_type(m), vec_to_array<5uz>(x));
     };
-    const auto p_hand = bp::transform(a_hand_transform)[*p_card] >> bp::blank >> bp::ulong_;
-    const auto file = (p_hand % bp::eol) >> *bp::ws;
+    const auto p_hand = bp::transform(tuple_to_pair)[
+        bp::transform(a_hand_transform)[*p_card] >> bp::blank >> bp::ulong_] >> bp::eol;
+    const auto file = *p_hand >> bp::eoi;
 
-    std::println("here");
-    const auto result = bp::parse(file_as_string("2023/7.input.txt"), file, bp::trace::on);
+    std::string example = R"EOF(32T3K 765
+T55J5 684
+KK677 28
+KTJJT 220
+QQQJA 483
+)EOF";
+
+    auto result = bp::parse(example, file);
+    //auto result = bp::parse(file_as_string("2023/7.input.txt"), file);
     if (!result) {
         std::cerr << "failed to parse input" << std::endl;
         return 1;
     }
 
-#if 0
-    std::vector x{0, 1, 2, 3};
-    int y = 10;
-    std::println("{}", y);
+    std::vector<std::pair<std::pair<hand_type, std::array<size_t, 5>>, long unsigned>>& hand_bids = *result;
 
-    const std::vector<std::pair<std::pair<hand_type, std::vector<int>>, long unsigned>>& hand_bids = *result;
-
-    const auto compare_hands = [](const auto& a, const auto& b) {
-        if (a.first > b.first) {
+    const auto compare_hands = [](
+        const std::pair<std::pair<hand_type, std::array<size_t, 5>>, size_t>& a,
+        const std::pair<std::pair<hand_type, std::array<size_t, 5>>, size_t>& b
+    ) {
+        if (a.first.first > b.first.first) {
             return true;
-        } else if (a.first < b.first) {
+        } else if (a.first.first < b.first.first) {
             return false;
         } else {
-            return a.second > b.second;
+            return a.first.second > b.first.second;
         }
     };
 
-    compare_hands(hand_bids[0], hand_bids[1]);
+    std::sort(hand_bids.begin(), hand_bids.end(), compare_hands);
 
-    //std::sort(hand_bids.begin(), hand_bids.end(), compare_hands);
-    std::cout << "part 1 = " << 0 << std::endl;
+    for (const auto& [hand_type_list, bid]: hand_bids) {
+        const auto& [t, hand] = hand_type_list;
+        for (const auto& c: hand) {
+            std::cout << c << ", ";
+        }
+        std::cout << std::endl;
+    }
+
+    size_t sum = 0;
+    for (const auto& [index, hand_bid]: hand_bids | std::views::enumerate) {
+        const auto& [_, bid] = hand_bid;
+        const auto rank = hand_bids.size() - index;
+        sum += rank * bid;
+        std::cout << rank << ", " << bid << std::endl;
+    }
+    std::cout << "expects:\n5, 483\n4, 684\n3, 28\n2, 220\n1, 765\n";
+
+    //expect:
+    //32T3K
+    //KK677
+    //KTJJT
+    //QQQJA
+    //T55J5
+
+    std::cout << "part 1 = " << sum << std::endl;
     std::cout << "part 2 = " << 0 << std::endl;
-    #endif
 
     return 0;
 }
