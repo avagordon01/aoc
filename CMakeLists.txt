@@ -35,10 +35,8 @@ FetchContent_Declare(
   URL https://github.com/boostorg/boost/releases/download/boost-1.87.0/boost-1.87.0-cmake.tar.gz
   EXCLUDE_FROM_ALL
   SYSTEM
+  OVERRIDE_FIND_PACKAGE
 )
-# TODO mesh library
-# openmesh https://www.graphics.rwth-aachen.de/media/openmesh_static/Documentations/OpenMesh-Doc-Latest/
-# boost.polygon https://www.boost.org/doc/libs/1_86_0/libs/polygon/doc/index.htm
 FetchContent_MakeAvailable(Boost)
 FetchContent_Declare(
   libassert
@@ -46,7 +44,12 @@ FetchContent_Declare(
   GIT_TAG        v2.1.2
   EXCLUDE_FROM_ALL
   SYSTEM
+  OVERRIDE_FIND_PACKAGE
 )
+# TODO compare mesh libraries
+# CGAL polygon or halfedge modules https://doc.cgal.org/latest/Manual/packages.html
+# openmesh https://www.graphics.rwth-aachen.de/media/openmesh_static/Documentations/OpenMesh-Doc-Latest/
+# boost.polygon https://www.boost.org/doc/libs/1_86_0/libs/polygon/doc/index.htm
 FetchContent_MakeAvailable(libassert)
 
 pkg_check_modules(clp REQUIRED IMPORTED_TARGET) # https://www.coin-or.org/Clp/userguide/index.html

@@ -9,6 +9,6 @@ if [ ! -d build ]; then
 fi
 if [ -d build ]; then
     config=Release
-    cmake --build build --config ${config}
+    cmake --build build --config ${config} --parallel 1
     cmake --install build --config ${config} --prefix install
 fi
