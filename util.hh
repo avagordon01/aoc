@@ -13,12 +13,12 @@
 #include <boost/graph/hawick_circuits.hpp>
 #include <boost/graph/bron_kerbosch_all_cliques.hpp>
 
-#include <eigen3/Eigen/Dense>
+#include <Eigen/Dense>
 
 #include <libassert/assert.hpp>
 
-#include <coin/ClpSimplex.hpp>
-#include <coin/CbcModel.hpp>
+// #include <coin/ClpSimplex.hpp>
+// #include <coin/CbcModel.hpp>
 
 auto file_as_string(std::string filename) -> std::string {
     std::ifstream file(filename);

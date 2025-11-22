@@ -16,8 +16,15 @@ include(FetchContent)
 
 find_package(PkgConfig REQUIRED)
 find_package(GTest)
-find_package(Eigen3 REQUIRED) # https://eigen.tuxfamily.org/dox/group__QuickRefPage.html
-# https://libeigen.gitlab.io/docs/group__QuickRefPage.html
+# https://eigen.tuxfamily.org/dox/group__QuickRefPage.html
+FetchContent_Declare(
+  Eigen3
+  URL https://gitlab.com/libeigen/eigen/-/archive/3.4.1/eigen-3.4.1.tar.gz
+  EXCLUDE_FROM_ALL
+  SYSTEM
+  OVERRIDE_FIND_PACKAGE
+)
+FetchContent_MakeAvailable(Eigen3)
 
 #when boost 1.87 makes it to the arch repos
 #find_package(Boost 1.87 REQUIRED COMPONENTS <components>)
