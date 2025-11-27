@@ -35,16 +35,6 @@ auto get_or(const auto& container, const auto& key, const auto& default_) -> dec
     }
 }
 
-int sign(auto x) {
-    if (x > 0) {
-        return 1;
-    } else if (x < 0) {
-        return -1;
-    } else {
-        return 0;
-    }
-}
-
 template<class... Ts>
 struct overloaded : Ts... { using Ts::operator()...; };
 
@@ -193,10 +183,6 @@ std::ostream& operator<<(std::ostream& os, const std::set<V>& s) {
 }
 }
 
-const auto positive_mod(const auto a, const auto b) {
-    return (b + (a % b)) % b;
-};
-
 template<size_t X, size_t Y, size_t Z = 1>
 struct mdbitset: std::bitset<X * Y * Z> {
     using parent = std::bitset<X * Y * Z>;
@@ -260,3 +246,28 @@ const auto dirs_3d_6 = std::array<Eigen::Vector3i, 6>{{
     {0, -1, 0},
     {-1, 0, 0},
 }};
+
+// mathematical operations
+int sign(auto x) {
+    if (x > 0) {
+        return 1;
+    } else if (x < 0) {
+        return -1;
+    } else {
+        return 0;
+    }
+}
+
+auto positive_mod(const auto a, const auto b) {
+    return (b + (a % b)) % b;
+}
+
+template<typename T>
+std::optional<T> lcm(const std::vector<T>& arr) {
+    return std::ranges::fold_left_first(arr, &std::lcm<T, T>);
+}
+
+template<typename T>
+std::optional<T> gcd(const std::vector<T>& arr) {
+    return std::ranges::fold_left_first(arr, &std::gcd<T, T>);
+}
