@@ -20,6 +20,16 @@
 // #include <coin/ClpSimplex.hpp>
 // #include <coin/CbcModel.hpp>
 
+auto binary_name_to_test_file_name(const char* binary) -> std::string {
+    // "./install/bin/2024-1"
+    // "2024-1.input.txt"
+    auto s = std::string(binary);
+    s.erase(0, s.rfind('/') + 1);
+    s[s.find('-')] = '/';
+    s.append(".input.txt");
+    return s;
+};
+
 auto file_as_string(std::string filename) -> std::string {
     std::ifstream file(filename);
     std::stringstream buffer;

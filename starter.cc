@@ -1,6 +1,6 @@
 #include "util.hh"
 
-auto main() -> int {
+auto main(int argc, const char* argv[]) -> int {
     namespace bp = boost::parser;
 
     const auto p_line = bp::ulong_long % bp::blank >> bp::eol;
@@ -8,7 +8,7 @@ auto main() -> int {
 
     const auto example = std::string{R"EOF()EOF"};
     //const auto result = bp::parse(example, p_file);
-    const auto result = bp::parse(file_as_string("2024/7.input.txt"), p_file);
+    const auto result = bp::parse(file_as_string(binary_name_to_test_file_name(argv[0])), p_file);
     if (!result) {
         std::cerr << "failed to parse input" << std::endl;
         return 1;
