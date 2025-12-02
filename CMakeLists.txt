@@ -77,7 +77,7 @@ link_libraries(
 )
 include_directories(PUBLIC "${PROJECT_SOURCE_DIR}")
 
-file(GLOB srcs RELATIVE "${PROJECT_SOURCE_DIR}" 2023/*.cc 2024/*.cc)
+file(GLOB srcs RELATIVE "${PROJECT_SOURCE_DIR}" 202*/*.cc)
 foreach(src ${srcs})
   get_filename_component(year ${src} DIRECTORY)
   get_filename_component(day ${src} NAME_WE)
