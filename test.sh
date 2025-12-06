@@ -10,4 +10,5 @@ set -ex
 #day=$(TZ=EST date '+%-d')
 #./install/bin/${year}-${day}
 
-./install/bin/2024-22
+# ./install/bin/2023-12
+./install/bin/2025-6
