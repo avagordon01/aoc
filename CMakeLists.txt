@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.21)
+cmake_minimum_required(VERSION 4.2)
 project(aoc CXX)
 
 set(CMAKE_CXX_STANDARD 23)
@@ -7,6 +7,7 @@ set(CMAKE_CXX_EXTENSIONS FALSE)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fmodules")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address,undefined")
 
 #set(CMAKE_CXX_CLANG_TIDY "clang-tidy;-checks=-*,bugprone-*,cert-dcl21-cpp,cert-dcl50-cpp,cert-env33-c,cert-err34-c,cert-err52-cpp,cert-err60-cpp,cert-flp30-c,cert-msc50-cpp,cert-msc51-cpp,cppcoreguidelines-*,google-build-using-namespace,google-explicit-constructor,google-global-names-in-headers,google-readability-casting,google-runtime-int,google-runtime-operator,hicpp-*,-hicpp-vararg,misc-*,modernize-*,performance-*,readability-*,-readability-identifier-length,-misc-use-anonymous-namespace")
@@ -75,6 +76,12 @@ link_libraries(
   libassert::assert
   PkgConfig::clp PkgConfig::cbc
 )
+add_library(utilmod)
+target_sources(utilmod
+  PUBLIC
+  FILE_SET CXX_MODULES FILES
+  utilmod.cc
+)
 include_directories(PUBLIC "${PROJECT_SOURCE_DIR}")
 
 file(GLOB srcs RELATIVE "${PROJECT_SOURCE_DIR}" 202*/*.cc)
@@ -97,3 +104,5 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(libmorton)
 
 target_link_libraries(2025-8 libmorton::libmorton)
+
+target_link_libraries(2025-test PRIVATE utilmod)
