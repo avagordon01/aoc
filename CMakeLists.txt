@@ -85,3 +85,15 @@ foreach(src ${srcs})
   add_executable(${name} ${src})
   install(TARGETS ${name})
 endforeach()
+
+FetchContent_Declare(
+  libmorton
+  GIT_REPOSITORY https://github.com/Forceflow/libmorton
+  GIT_TAG v0.2.12
+  EXCLUDE_FROM_ALL
+  SYSTEM
+  OVERRIDE_FIND_PACKAGE
+)
+FetchContent_MakeAvailable(libmorton)
+
+target_link_libraries(2025-8 libmorton::libmorton)
