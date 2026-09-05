@@ -1,4 +1,7 @@
 cmake_minimum_required(VERSION 4.2)
+set(CMAKE_EXPERIMENTAL_CXX_IMPORT_STD "d0edc3af-4c50-42ea-a356-e2862fe7a444")
+set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_MODULE_STD 1)
 project(aoc CXX)
 
 set(CMAKE_CXX_STANDARD 23)
@@ -28,7 +31,9 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(Eigen3)
 
+set(BOOST_USE_MODULES 1)
 set(BOOST_INCLUDE_LIBRARIES
+  any
   parser      # https://www.boost.org/doc/libs/release/doc/html/parser.html
   graph       # https://www.boost.org/doc/libs/release/libs/graph/
   algorithm   # https://www.boost.org/doc/libs/release/libs/algorithm/doc/html/index.html
@@ -39,7 +44,7 @@ set(BOOST_INCLUDE_LIBRARIES
 )
 FetchContent_Declare(
   Boost
-  URL https://github.com/boostorg/boost/releases/download/boost-1.87.0/boost-1.87.0-cmake.tar.gz
+  URL https://github.com/boostorg/boost/releases/download/boost-1.90.0/boost-1.90.0-cmake.tar.gz
   EXCLUDE_FROM_ALL
   SYSTEM
   OVERRIDE_FIND_PACKAGE
@@ -82,6 +87,7 @@ target_sources(utilmod
   FILE_SET CXX_MODULES FILES
   utilmod.cc
 )
+target_compile_features(utilmod PRIVATE cxx_std_23 INTERFACE cxx_std_23)
 include_directories(PUBLIC "${PROJECT_SOURCE_DIR}")
 
 file(GLOB srcs RELATIVE "${PROJECT_SOURCE_DIR}" 202*/*.cc)

@@ -1,18 +1,25 @@
 module;
+
+export module utilmod;
+
 //TODO
 //use import std instead when it works
 //https://cmake.org/cmake/help/latest/manual/cmake-cxxmodules.7.html#import-std-support
-#include <bits/stdc++.h>
+export import std;
 
-#include <boost/parser/parser.hpp>
-#include <boost/hana.hpp>
-#include <boost/container_hash/hash.hpp>
-#include <boost/container_hash/is_tuple_like.hpp>
-#include <boost/graph/adjacency_list.hpp>
-#include <boost/graph/topological_sort.hpp>
-#include <boost/graph/filtered_graph.hpp>
-#include <boost/graph/hawick_circuits.hpp>
-#include <boost/graph/bron_kerbosch_all_cliques.hpp>
+// #include <boost/parser/parser.hpp>
+// #include <boost/hana.hpp>
+// #include <boost/container_hash/hash.hpp>
+// #include <boost/container_hash/is_tuple_like.hpp>
+// #include <boost/graph/adjacency_list.hpp>
+// #include <boost/graph/topological_sort.hpp>
+// #include <boost/graph/filtered_graph.hpp>
+// #include <boost/graph/hawick_circuits.hpp>
+// #include <boost/graph/bron_kerbosch_all_cliques.hpp>
+export import boost.parser;
+export import boost.hana;
+export import boost.container_hash;
+export import boost.graph;
 
 #include <Eigen/Dense>
 
@@ -20,8 +27,6 @@ module;
 
 // #include <coin/ClpSimplex.hpp>
 // #include <coin/CbcModel.hpp>
-
-export module utilmod;
 
 auto binary_name_to_test_file_name(const char* binary) -> std::string {
     // "./install/bin/2024-1"
